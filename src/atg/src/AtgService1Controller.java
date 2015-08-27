@@ -1,9 +1,12 @@
 package atg.src;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,4 +29,15 @@ public class AtgService1Controller {
         try {msg3 = service3.get(text);} catch(Exception e) {}
         return new Message(msg1, msg2, msg3);
     }
+
+	private final static String CONTEXTPATH = "/ATG";
+	
+	public static void main(String args[]) throws Exception {
+	    @SuppressWarnings("resource")
+	    ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring4-servlet.xml");
+	    Server server = new Server(8090);
+	    server.setHandler(new WebAppContext("WebContent", CONTEXTPATH));
+	    server.start();
+	    server.join();
+	}
 }
